@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 
-function Login() {
+function Login(props) {
     const [userEmail, setUserEmail] = useState("");
     const [userPassword, setUserPassword] = useState("");
 
@@ -19,7 +19,13 @@ function Login() {
                 password: userPassword,
             })
             .then((res) => console.log("res: \n", res.data.type)) // 200 ok
-            .catch((err) => console.log("err:\n", err.response.data.type, err.response.data.message)); // 401 unauthorised
+            .catch((err) =>
+                console.log(
+                    "err:\n",
+                    err.response.data.type,
+                    err.response.data.message
+                )
+            ); // 401 unauthorised
     };
     return (
         <>
@@ -70,6 +76,7 @@ function Login() {
                 <a
                     className="small-fonts"
                     // onClick={() => alert("Hello there")}
+                    // onClick={props.setCurrPage("register")}
                 >
                     Create a new account
                 </a>

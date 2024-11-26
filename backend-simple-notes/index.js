@@ -6,7 +6,7 @@ const port = 7000
 const app = express()
 app.use(cors())
 app.use(express.json())
-app.use(express.urlencoded({extended: true}))
+app.use(express.urlencoded({ extended: true }))
 
 // app.use(bodyParser.urlencoded({extended: false}))
 
@@ -64,6 +64,16 @@ app.post('/checkpassword', async (req, res) => {
             break;
     }
 })
+// ------- Login -------------
+app.get('/checklogin', (req, res) => {
+    res.set('Access-Control-Allow-Credentials', true);
+    res.json({
+        loggedIn: req.session.loggedIn,
+        user: req.session.user,
+        message: "Logged In: " + req.session.loggedIn
+    })
+})
+// ------- Login -------------
 
 app.listen(port, () => {
     console.log("The server is running on port:", port);

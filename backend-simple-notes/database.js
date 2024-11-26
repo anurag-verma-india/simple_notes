@@ -19,6 +19,7 @@ const pool = mysql.createPool({
     // password: process.env.MYSQL_PASSWORD,
     // database: process.env.MYSQL_DATABASE
 
+    connectionLimit: 100, // To save CPU resources
     host: 'localhost',
     user: 'root',
     password: 'Pass#@123',
