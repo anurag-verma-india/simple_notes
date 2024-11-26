@@ -1,7 +1,19 @@
 import mysql from 'mysql2' // 😎 Using ES6 modules not CommonJS
 import { createHash } from 'node:crypto'
 
+// const mysql_host = process.env.ABCHOST
+// const mysql_user = process.env.ABCUSER
+// const mysql_password = process.env.ABCPASSWORD
+// const mysql_database = process.env.ABCDATABASE
+
+
 const pool = mysql.createPool({
+
+    // host: mysql_host,
+    // user: mysql_user,
+    // database: mysql_database,
+    // password: mysql_password,
+
     // host: process.env.MYSQL_HOST,
     // user: process.env.MYSQL_USER,
     // password: process.env.MYSQL_PASSWORD,
@@ -41,8 +53,14 @@ export async function getUsers() {
     return rows
 }
 
-async function getUser(email) {
+export async function getUser(email) {
     const [result] = await pool.query("SELECT * FROM users where email=?", [email]) // select first item from array [result]
+    const user = result[0]
+    return user
+}
+
+export async function getUserById(id) {
+    const [result] = await pool.query("SELECT * FROM users where id=?", [id]) // select first item from array [result]
     const user = result[0]
     return user
 }
@@ -60,16 +78,20 @@ export async function checkPassword(email, password) {
         // let hash = crypto.createHash('sha256').update(password).digest("hex")
         let hash = createHash('sha256').update(password).digest("hex")
         // console.log(hash);
-        
         if (user.passkey === hash) {
-            return "Correct Password"
+            // return "Correct Password"
+            return 2
         }
-        return "Incorrect Password"
+        // return "Incorrect Password"
+        return 1
     }
-    else return "Invalid email"
+    // else return "Invalid email"
+    else return 0
 }
 
 
+// const user = await getUserById(1)
+// console.log(user)
 
 // console.log("anurag", (await checkPassword("anurag@gmail.com", "password")))
 // console.log("anurag", (await checkPassword("anurag@gmail.com", "passwordjkdas")))

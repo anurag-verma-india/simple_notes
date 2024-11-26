@@ -1,0 +1,19 @@
+html, body {
+    padding: 3rem;
+}
+
+.register-card {
+    padding: 3rem;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+
+    width: 50%;
+    border: 5px solid black;
+    border-radius: 3rem;
+    padding: 10px;
+    font-size: 2rem;
+}

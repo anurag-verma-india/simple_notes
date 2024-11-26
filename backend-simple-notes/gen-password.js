@@ -7,6 +7,7 @@ let hash = createHash('sha256').update('password').digest("hex")
 console.log(hash)
 // let hash2 = crypto.createHash('sha256').update('batman').digest("hex")
 let hash2 = createHash('sha256').update('batman').digest("hex")
+
 console.log(hash2)
 
 
