@@ -1,46 +1,103 @@
-import "./App.css";
-import Login from "../components/Login";
-import Register from "../components/Register";
-import { useState } from "react";
 import axios from "axios";
+import { createBrowserRouter, Link, RouterProvider } from "react-router-dom";
+import "./App.css";
+import "../components/NotesPage.css";
+import { useState } from "react";
 import { useEffect } from "react";
-import UserLoggedIn from "../components/UserLoggedIn";
+import { getCookie } from "../repeated_js_code/cookie_manager";
+import Login from "../components/Login";
+import NotesPage from "../components/NotesPage";
+import EditProfile from "../components/EditProfile";
+import Register from "../components/Register";
+import Home from "../components/Home";
+import ForgotPassword from "../components/ForgotPassword";
 
 axios.defaults.withCredentials = true;
 
 function App() {
-    // const [currPage, setCurrPage] = useState("register");
+    const [userAuthenticated, setUserAuthenticated] = useState(false);
     // const [currPage, setCurrPage] = useState("login");
-    const [loggedIn, setLoggedIn] = useState(false);
-    // const [loggedIn, setLoggedIn] = useState(true);
 
-    // ------- Login -------------
-    // const [loggedIn, setLoggedIn] = useState(false);
-    const [user, setUser] = useState({});
+    const router = createBrowserRouter([
+        {
+            path: "/",
+            element: (
+                <Home
+                    userAuthenticated={userAuthenticated}
+                    setUserAuthenticated={setUserAuthenticated}
+                />
+            ),
+        },
+        {
+            path: "/login",
+            element: (
+                <Home
+                    userAuthenticated={userAuthenticated}
+                    setUserAuthenticated={setUserAuthenticated}
+                />
+            ),
+        },
+        {
+            path: "/register",
+            element: <Register />,
+        },
+        {
+            path: "/edit",
+            element: (
+                <EditProfile
+                    userAuthenticated={userAuthenticated}
+                    setUserAuthenticated={setUserAuthenticated}
+                />
+            ),
+        },
+        {
+            path: "/notes",
+            element: <NotesPage />,
+        },
+        {
+            path: "/forgotPassword",
+            element: <ForgotPassword />,
+        },
+    ]);
 
+    // Check if user is already authenticated by checking cookies
     useEffect(() => {
-        console.log("Checking login status");
-        axios.get("http://localhost:7000/checklogin").then((resp) => {
-            if (resp.status === 200 || resp.status === 401) {
-                setLoggedIn(resp.data.loggedIn);
-                setUser(resp.data.user);
-            } else {
-                setLoggedIn(false);
-            }
-        });
+        if (getCookie("username") !== null) setUserAuthenticated(true);
     }, []);
-
-    // ------- Login -------------
-
+    // login register notes edit
     return (
         <>
-            {/* {currPage === "login" && <Login setCurrPage={setCurrPage} />}
-            {currPage === "register" && <Register setCurrPage={setCurrPage} />} */}
-            {loggedIn && <UserLoggedIn />}
-            {!loggedIn && <Login />}
-            {/* <Register /> */}
+            <RouterProvider router={router} />
+            {/* {userAuthenticated && currPage === "login" && (
+                <Login
+                    currPage={currPage}
+                    setCurrPage={setCurrPage}
+                    userAuthenticated={userAuthenticated}
+                    setUserAuthenticated={setUserAuthenticated}
+                />
+            )} */}
+            {/* <DefaultScreen
+                userAuthenticated={userAuthenticated}
+                setUserAuthenticated={setUserAuthenticated}
+            /> */}
+            {/* {currPage == "register" && <Register />} */}
+            {/* <EditProfile /> */}
+            {/* {currPage === "notes" && <NotesPage />} */}
         </>
     );
 }
+
+// function DefaultScreen(props) {
+//     if (props.userAuthenticated) {
+//         return <NotesPage />;
+//     } else {
+//         return (
+//             <Login
+//                 setUserAuthenticated={props.setUserAuthenticated}
+//                 userAuthenticated={props.userAuthenticated}
+//             />
+//         );
+//     }
+// }
 
 export default App;

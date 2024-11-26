@@ -1,34 +1,60 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import {
+    getCookie,
+    setCookie,
+    deleteCookie,
+    deletAllCookies,
+} from "../repeated_js_code/cookie_manager";
+import { Link } from "react-router-dom";
 
 function Login(props) {
     const [userEmail, setUserEmail] = useState("");
     const [userPassword, setUserPassword] = useState("");
+    // const [userAuthenticated, setUserAuthenticated] = useState(false);
+    // const username = getCookie("username")
+    // console.log(username)
+    // useEffect(console.log(getCookie("username")), []);
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
         console.log(userEmail);
         console.log(userPassword);
 
+        // Save username to the cookies too
         axios
-            // .post(`http://localhost:7000/checkpassword`, {
-            .post("http://localhost:7000/checkpassword", {
-                // email: "anurag@gmail.com",
-                // password: "password",
+            .post(`http://localhost:7000/login`, {
                 email: userEmail,
                 password: userPassword,
             })
-            .then((res) => console.log("res: \n", res.data.type)) // 200 ok
-            .catch((err) =>
+            .then((res) => {
+                // console.log("res: \n", res.data.type, res.data.message); // 200 ok
+                // console.log(res);
+                for (const [key, value] of Object.entries(res.data.user)) {
+                    // console.log(`${key}: ${value}`);
+                    setCookie(key, value, 365);
+                }
+
+                if (res.data.authenticated) {
+                    // console.log("User authenticated");
+                    props.setUserAuthenticated(true);
+                    // props.setCurrPage("notes");
+                }
+                // console.log(res.data.user);
+                // console.log("res full: \n", res);
+            })
+            .catch((err) => {
                 console.log(
                     "err:\n",
                     err.response.data.type,
                     err.response.data.message
-                )
-            ); // 401 unauthorised
+                );
+                console.log("err full: \n", err);
+            });
+        // window.location.reload();
     };
     return (
-        <>
+        <div id="center-card-container">
             <div id="center-card">
                 <h1 id="main-title">Log in to your account</h1>
                 <form id="main-form" method="post" onSubmit={handleFormSubmit}>
@@ -73,15 +99,18 @@ function Login(props) {
                 >
                     Forgot Password?
                 </a>
-                <a
-                    className="small-fonts"
-                    // onClick={() => alert("Hello there")}
-                    // onClick={props.setCurrPage("register")}
-                >
-                    Create a new account
-                </a>
+                <Link to="/register">
+                    <p
+                        className="small-fonts"
+                        // onClick={() => alert("Hello there")}
+                        // onClick={props.setCurrPage("register")}
+                    >
+                        Create a new account
+                    </p>
+                </Link>
+                {/* <button onClick={deletAllCookies}>Delete all cookies</button> */}
             </div>
-        </>
+        </div>
     );
 }
 

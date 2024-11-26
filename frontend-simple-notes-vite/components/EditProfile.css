@@ -1,0 +1,96 @@
+#editProfile {
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    /* justify-content: center; */
+    justify-content: space-between;
+}
+
+#editProfile h1 {
+    font-size: 4rem;
+    text-align: center;
+
+    flex-grow: 5;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+#editProfile button {
+    margin-left: 2rem;
+
+    flex-grow: 1;
+
+    max-width: 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#editProfile img {
+    width: 5rem;
+}
+
+#edit-profile-form {
+    padding: 2rem;
+    width: 40%;
+    align-items: center;
+    border: 0.5rem solid black;
+    border-radius: 2rem;
+
+    display: flex;
+    flex-direction: column;
+}
+
+#edit-profile-form label {
+    font-size: 3rem;
+}
+button {
+    font-size: 3rem;
+    padding: 0.5rem;
+}
+
+#update-password {
+    background-color: var(--hot-pink);
+}
+
+
+@media (max-width: 1050px) {
+    #editProfile h1 {
+        font-size: 2rem;
+    }
+
+    #editProfile button {
+        margin-left: 1rem;
+        max-width: 3rem;
+    }
+
+    #editProfile img {
+        width: 3rem;
+    }
+
+    #edit-profile-form { 
+        border: 0;
+        padding: 0;
+        width: 100%;
+    }
+
+    #edit-profile-form button {
+        font-size: 2rem;
+        padding: 1rem;
+
+    }
+
+    #edit-profile-form input {
+        width: 90%;
+    }
+
+
+    #edit-profile-form label {
+        font-size: 2rem;
+    }
+}

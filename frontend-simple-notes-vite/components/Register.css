@@ -1,5 +1,5 @@
 html, body {
-    padding: 3rem;
+    /* padding: 3rem; */
 }
 
 .register-card {
@@ -14,6 +14,6 @@ html, body {
     width: 50%;
     border: 5px solid black;
     border-radius: 3rem;
-    padding: 10px;
     font-size: 2rem;
+    margin: 3rem;
 }

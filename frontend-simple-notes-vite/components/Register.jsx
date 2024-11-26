@@ -1,7 +1,7 @@
 // Incomplete Component
 
 import { useState } from "react";
-import "./Register.css"
+import "./Register.css";
 
 function Register() {
     const [inputs, setInputs] = useState({
@@ -107,7 +107,7 @@ function Register() {
                 <a
                     className="small-fonts"
                     target="_blank"
-                    href="/forgot-password"
+                    href="/forgotPassword"
                 >
                     Forgot Password?
                 </a>

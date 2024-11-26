@@ -1,5 +1,7 @@
 import mysql from 'mysql2' // 😎 Using ES6 modules not CommonJS
 import { createHash } from 'node:crypto'
+import * as envFile from './env.json' with {type: "json"} // Importing json modules is an experimental feature
+const env = envFile.default
 
 // const mysql_host = process.env.ABCHOST
 // const mysql_user = process.env.ABCUSER
@@ -8,22 +10,11 @@ import { createHash } from 'node:crypto'
 
 
 const pool = mysql.createPool({
-
-    // host: mysql_host,
-    // user: mysql_user,
-    // database: mysql_database,
-    // password: mysql_password,
-
-    // host: process.env.MYSQL_HOST,
-    // user: process.env.MYSQL_USER,
-    // password: process.env.MYSQL_PASSWORD,
-    // database: process.env.MYSQL_DATABASE
-
     connectionLimit: 100, // To save CPU resources
-    host: 'localhost',
-    user: 'root',
-    password: 'Pass#@123',
-    database: 'simple_notes'
+    host: env.mysql_host,
+    user: env.mysql_user,
+    password: env.mysql_password,
+    database: env.mysql_database
 }).promise()
 
 
@@ -54,7 +45,7 @@ export async function getUsers() {
     return rows
 }
 
-export async function getUser(email) {
+export async function getUserByEmail(email) {
     const [result] = await pool.query("SELECT * FROM users where email=?", [email]) // select first item from array [result]
     const user = result[0]
     return user
@@ -67,7 +58,7 @@ export async function getUserById(id) {
 }
 
 export async function checkUserExists(email) {
-    const user = await getUser(email)
+    const user = await getUserByEmail(email)
     if (user != undefined && user.length !== 0) {
         return user.id;
     } else { return false }
@@ -75,7 +66,7 @@ export async function checkUserExists(email) {
 
 export async function checkPassword(email, password) {
     if (await checkUserExists(email)) {
-        const user = await getUser(email)
+        const user = await getUserByEmail(email)
         // let hash = crypto.createHash('sha256').update(password).digest("hex")
         let hash = createHash('sha256').update(password).digest("hex")
         // console.log(hash);
@@ -89,6 +80,8 @@ export async function checkPassword(email, password) {
     // else return "Invalid email"
     else return 0
 }
+
+// export async function createUser(id, username, fname, lname, )
 
 
 // const user = await getUserById(1)
