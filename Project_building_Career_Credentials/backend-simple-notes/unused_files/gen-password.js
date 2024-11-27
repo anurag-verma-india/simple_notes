@@ -10,6 +10,9 @@ let hash2 = createHash('sha256').update('batman').digest("hex")
 
 console.log(hash2)
 
+let hash3 = createHash('sha256').update('sample').digest("hex")
+console.log(hash3);
+
 
 
 // const {

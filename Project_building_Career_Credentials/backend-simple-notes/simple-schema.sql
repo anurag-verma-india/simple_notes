@@ -35,7 +35,15 @@ CREATE TABLE
     );
 
 INSERT INTO
-    users (username, fname, lname, email, phone, passkey, active)
+    users (
+        username,
+        fname,
+        lname,
+        email,
+        phone,
+        passkey,
+        active
+    )
 VALUES
     (
         'batman',
@@ -59,6 +67,18 @@ VALUES
         '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'
     );
 
+INSERT INTO
+    users (username, fname, lname, email, phone, passkey)
+VALUES
+    (
+        'sample-user',
+        'Sample',
+        'Sam',
+        'sample@gmail.com',
+        '00000000',
+        'af2bdbe1aa9b6ec1e2ade1d694f41fc71a831d0268e9891562113d8a62add1bf'
+    );
+
 -- INSERT INTO
 -- INSERT INTO
 --     users()
@@ -70,5 +90,4 @@ VALUES
 -- reference
 -- Show schema 
 -- describe [db_name.]table_name;
-
 -- DROP DATABASE simple_notes;

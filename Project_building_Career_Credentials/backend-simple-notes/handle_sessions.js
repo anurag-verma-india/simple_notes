@@ -16,7 +16,7 @@ app.use((req, res, next) => {
 
 // Session middleware
 app.use(session({
-    secret: 'meaningoflifeis42',
+    secret: process.env.secret,
     cookie: { maxAge: 1000 * 365 * 24 * 60 * 60 * 1000 }, // 1000 years (in milliseconds)
     saveUninitialized: false, // True: new session id for every request (put false if you have login system)
     resave: false, // https://github.com/expressjs/session#options // read this for details (date accessed: 26 Nov 2024)

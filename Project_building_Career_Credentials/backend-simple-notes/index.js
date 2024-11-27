@@ -96,7 +96,8 @@ app.use((req, res, next) => {
 
 // Session middleware
 app.use(session({
-    secret: 'meaningoflifeis42',
+    secret: process.env.secret,
+
     cookie: { maxAge: 1000 * 365 * 24 * 60 * 60 * 1000 }, // 1000 years (in milliseconds)
     saveUninitialized: false, // True: new session id for every request (put false if you have login system)
     resave: false, // https://github.com/expressjs/session#options // read this for details (date accessed: 26 Nov 2024)
@@ -120,6 +121,9 @@ app.post('/login', async (req, res) => {
             const password_status = await checkPassword(email, password)
 
             switch (password_status) {
+                case -1:
+                    res.status(401).send({ "type": -1, "message": "User is inactive, contact administrator" })
+                    break;
                 case 0:
                     // Invalid email
                     res.status(401).send({ "type": 0, "message": "Email does not exist in database" })
@@ -128,7 +132,7 @@ app.post('/login', async (req, res) => {
                     // Invalid password
                     res.status(401).send({ "type": 1, "message": "Password is incorrect" })
                     break;
-                case 2:
+                case 2: // also generated -1
                     // Valid email and correct password
                     // Save username to the cookies too
                     const user = await getUserByEmail(email);
@@ -137,7 +141,6 @@ app.post('/login', async (req, res) => {
                     let { id, username, fname, lname, phone } = user
                     req.session.user = { id, username, email, fname, lname, phone } // never send password to the user in production
                     res.json(req.session);
-
                     // res.status(200).send({ "type": 2, "message": "Correct password" })
                     break;
             }
@@ -159,6 +162,11 @@ app.post('/login', async (req, res) => {
     }
 })
 // -
+
+
+// app.post('/patch', async (req, res) => {
+// Check if authenticated else send error response
+// }
 
 app.listen(port, () => {
     console.log("The server is running on port:", port);

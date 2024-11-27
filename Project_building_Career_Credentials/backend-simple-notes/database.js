@@ -1,7 +1,7 @@
 import mysql from 'mysql2' // 😎 Using ES6 modules not CommonJS
 import { createHash } from 'node:crypto'
-import * as envFile from './env.json' with {type: "json"} // Importing json modules is an experimental feature
-const env = envFile.default
+// import * as envFile from './env.json' with {type: "json"} // Importing json modules is an experimental feature
+// const env = envFile.default
 
 // const mysql_host = process.env.ABCHOST
 // const mysql_user = process.env.ABCUSER
@@ -11,10 +11,16 @@ const env = envFile.default
 
 const pool = mysql.createPool({
     connectionLimit: 100, // To save CPU resources
-    host: env.mysql_host,
-    user: env.mysql_user,
-    password: env.mysql_password,
-    database: env.mysql_database
+    // host: env.mysql_host,
+    // user: env.mysql_user,
+    // password: env.mysql_password,
+    // database: env.mysql_database
+
+    host: process.env.mysql_host,
+    user: process.env.mysql_user,
+    password: process.env.mysql_password,
+    database: process.env.mysql_database
+
 }).promise()
 
 
@@ -65,6 +71,10 @@ export async function checkUserExists(email) {
 }
 
 export async function checkPassword(email, password) {
+    // return 0 if user doesn't exit
+    // 1 for incorrect password
+    // 2 for correct password
+    // -1 for inactive user
     if (await checkUserExists(email)) {
         const user = await getUserByEmail(email)
         // let hash = crypto.createHash('sha256').update(password).digest("hex")
@@ -72,7 +82,8 @@ export async function checkPassword(email, password) {
         // console.log(hash);
         if (user.passkey === hash) {
             // return "Correct Password"
-            return 2
+            if (user.active === 0) return -1
+            else return 2
         }
         // return "Incorrect Password"
         return 1
@@ -80,6 +91,27 @@ export async function checkPassword(email, password) {
     // else return "Invalid email"
     else return 0
 }
+
+
+
+export async function patch(userDetails) {
+    if (await checkUserExists(email)) {
+        const user = await getUserByEmail(email)
+        // let hash = crypto.createHash('sha256').update(password).digest("hex")
+        let hash = createHash('sha256').update(password).digest("hex")
+        // console.log(hash);
+        if (user.passkey === hash) {
+            // return "Correct Password"
+            if (user.active === 0) return -1
+            else return 2
+        }
+        // return "Incorrect Password"
+        return 1
+    }
+    // else return "Invalid email"
+    else return 0
+}
+
 
 // export async function createUser(id, username, fname, lname, )
 
