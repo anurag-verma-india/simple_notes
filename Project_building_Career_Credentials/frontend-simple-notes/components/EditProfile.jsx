@@ -1,20 +1,20 @@
+import * as jsonLinks from "../src/links.json";
 import { useEffect, useState } from "react";
 import "../components/EditProfile.css";
 import {
     deleteAllCookies,
     deleteCookie,
     getCookie,
+    setTheseCookies,
 } from "../repeated_js_code/cookie_manager";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { LogOutFunc } from "../repeated_js_code/LogOutFunc";
+import { LogOutFunc, SilentLogOutFunc } from "../repeated_js_code/LogOutFunc";
 
 function EditProfile(props) {
     const navigate = useNavigate();
     // useEffect(() => {
     const [oldFormData, setOldFormData] = useState({
-        fname: "",
-        lname: "",
         username: "",
         email: "",
         phone: "",
@@ -26,39 +26,73 @@ function EditProfile(props) {
         email: getCookie("email"),
         phone: getCookie("phone"),
     });
+    var changedValuesStr = "";
     // console.log(email, fname, lname, username);
     // }, []);
     function handleEditProfileForm(event) {
         event.preventDefault();
+        var changedValues = {};
         // get user details from server
         // if (confirm("Press a button!")) {
         // } else {
         // }
 
         axios
-            .post(`http://localhost:7000/getSessionDetails`, {
-                // email: getCookie("email"),
-            })
+            // .post(`http://localhost:7000/getSessionDetails`, {})
+            .post(jsonLinks.getSessionDetails, {})
             .then((res) => {
-                console.log(res);
-                // if (res.data.authenticated) {
-                //     setFormData(res.data.user);
-                //     console.log(res.data.user);
-                // }
+                // console.log(res);
+                if (res.data.username) {
+                    setOldFormData(res.data);
+                    // for (const [key, value] of object.entries(res.data)) {
+                    //     console.log(`${key} = ${value}`);
+                    // }
+                    for (const [key, value] of Object.entries(formData)) {
+                        // console.log(
+                        //     `old ${key}: ${value}\nnew ${key}: ${res.data[key]}\n`
+                        // );
+                        if (value !== res.data[key]) {
+                            // changedValues += `${key}\n${value} -> ${res.data[key]}\n\n`;
+                            changedValuesStr += `${key}\n${res.data[key]} -> ${value}\n\n`;
+                            changedValues[key] = value;
+                        }
+                    }
+
+                    if (
+                        confirm(
+                            `Confirm changing these values: \n${changedValuesStr}`
+                        )
+                    ) {
+                        // User confirmed to change the values
+
+                        // console.log(changedValuesStr);
+                        // console.log(changedValues);
+                        axios
+                            .post(jsonLinks.patchUser, { changedValues })
+                            .then((res) => {
+                                console.log(res);
+                                setTheseCookies(changedValues);
+                            })
+                            .catch((err) => {
+                                console.log("patchUser error: \n", err);
+                            });
+                    }
+                    // else {
+                    // }
+                }
             })
             .catch((err) => {
                 // console.log(
-                //     "err:\n",
                 //     err.response.data.type,
                 //     err.response.data.message
                 // );
                 console.log("err full: \n", err);
                 if (err.response.data.type === 0) {
-                    LogOutFunc(props)
+                    SilentLogOutFunc(props);
+                    alert(
+                        "Some error occurred on our servers\nSo you were logged out"
+                    );
                 }
-                // alert(
-                //     "Some error occured, please try again or contact the site operator"
-                // );
             });
     }
 

@@ -16,7 +16,6 @@ function NotesPage(props) {
                     <button
                         onClick={() => {
                             LogOutFunc(props);
-                            props.setUserAuthenticated(false);
                         }}
                         // onClick={() => {
                         // LogOutFunc(props);

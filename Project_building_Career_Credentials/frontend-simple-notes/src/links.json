@@ -1,0 +1,4 @@
+{
+    "getSessionDetails": "http://localhost:7000/getSessionDetails",
+    "patchUser": "http://localhost:7000/patchUser"
+}

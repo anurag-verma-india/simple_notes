@@ -20,7 +20,7 @@ function Login(props) {
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
-        console.log(props.userAuthenticated);
+        console.log("userAuthenticated: ", props.userAuthenticated);
         console.log(userEmail);
         console.log(userPassword);
 
@@ -37,7 +37,10 @@ function Login(props) {
                     // console.log(`${key}: ${value}`);
                     setCookie(key, value, 365);
                 }
-
+                console.log(
+                    "authenticated after response: ",
+                    res.data.authenticated
+                );
                 if (res.data.authenticated) {
                     // console.log("User authenticated");
                     props.setUserAuthenticated(true);

@@ -130,6 +130,8 @@ function App() {
                     <Route
                         path="/edit"
                         element={
+                            // <EditProfile />
+
                             userAuthenticated ? (
                                 <EditProfile
                                     userAuthenticated={userAuthenticated}

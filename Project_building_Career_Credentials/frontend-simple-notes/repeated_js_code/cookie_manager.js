@@ -33,3 +33,11 @@ export function deleteAllCookies() {
         }
     }
 }
+
+export function setTheseCookies(keyValuePair) {
+    for (const [key, value] of Object.entries(keyValuePair)) {
+        console.log(`${key}: ${value}`)
+        deleteCookie(key)
+        setCookie(key, value, 365)
+    }
+}
