@@ -1,6 +1,6 @@
 import express from 'express'
 import cors from 'cors'
-import { getUserById, getUsers, checkPassword, getUserByEmail } from './database.js'
+import { getUserById, getUsers, checkPassword, getUserByEmail, patchUser } from './database.js'
 import session from 'express-session'
 const port = 7000
 const store = new session.MemoryStore(); // Session module has a class MemoryStore 
@@ -32,6 +32,16 @@ app.use(session({
     resave: false, // https://github.com/expressjs/session#options // read this for details (date accessed: 26 Nov 2024)
     store: store
 }))
+// app.use(async (req, res, next) => {
+//     if (req.session.authenticated) {
+//         next()
+//         const email = req.session.user.email
+//         const user = await getUserByEmail(email);
+//         let { id, username, fname, lname, phone } = user
+//         req.session.user = { id, username, email, fname, lname, phone } // never send password to the user in production
+//         res.json(req.session);
+//     }
+// })
 
 
 // app.use(bodyParser.urlencoded({extended: false}))
@@ -124,21 +134,19 @@ app.post('/login', async (req, res) => {
                     // Invalid password
                     res.status(401).send({ "type": 1, "message": "Password is incorrect" })
                     break;
-                case 2: // also generated -1
+                case 2:
                     // Valid email and correct password
                     // Save username to the cookies too
+                    // console.log(user)
+                    // req.session.email = user.email;
                     const user = await getUserByEmail(email);
-                    console.log(user)
                     req.session.authenticated = true;
-                    req.session.email = user.email;
                     let { id, username, fname, lname, phone } = user
                     req.session.user = { id, username, email, fname, lname, phone } // never send password to the user in production
                     res.json(req.session);
                     // res.status(200).send({ "type": 2, "message": "Correct password" })
                     break;
             }
-
-
             // if (email === users[0].email && password === users[0].password) {
             //     // Passwords matched
             //     req.session.authenticated = true;
@@ -158,22 +166,28 @@ app.post('/login', async (req, res) => {
 
 app.post('/getSessionDetails', (req, res) => {
     // console.log(req.body.email)
-    console.log("session: \n", req.sessionID, "\n")
+    // console.log("session: \n", req.sessionID, "\n")
     console.log(req.session)
     // getUserByEmail()
     // res.sendStatus(200)
     if (req.session.authenticated) {
         res.status(200).send(req.session.user)
-
     } else {
         res.status(401).send({ type: 0, message: "User is not authenticated" })
     }
 })
 
 
-// app.post('/patch', async (req, res) => {
-// Check if authenticated else send error response
-// }
+app.post('/patchUser', async (req, res) => {
+    // Check if authenticated else send error response
+    var patchInfo;
+    if (req.session.authenticated) {
+        const patchInfo = patchUser(req.body.changedValues, req.session.user.email)
+        // console.log("req.body.changedValues: ", req.body.changedValues)
+        res.status(200).send({ success: 1, info: patchInfo })
+    } else
+        res.status(401).send({ type: 0, message: "User is not authenticated" })
+})
 
 app.listen(port, () => {
     console.log("The server is running on port:", port);

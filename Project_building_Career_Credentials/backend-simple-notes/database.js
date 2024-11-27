@@ -94,23 +94,18 @@ export async function checkPassword(email, password) {
 
 
 
-export async function patch(userDetails) {
-    if (await checkUserExists(email)) {
-        const user = await getUserByEmail(email)
-        // let hash = crypto.createHash('sha256').update(password).digest("hex")
-        let hash = createHash('sha256').update(password).digest("hex")
-        // console.log(hash);
-        if (user.passkey === hash) {
-            // return "Correct Password"
-            if (user.active === 0) return -1
-            else return 2
-        }
-        // return "Incorrect Password"
-        return 1
+export async function patchUser(userDetails, userEmail) {
+    console.log("patch these: ", userDetails, "\n On this user", userEmail)
+    for (const [key, value] of Object.entries(userDetails)) {
+        console.log(
+            `changing\n-> ${key}: ${value}\n`
+        );
+        const [result] = await pool.query(`UPDATE users SET ${key} = ? WHERE email = ?`, [value, userEmail])
+        // console.log("---\nresult: \n", result.info, "\n---")
+        return result.info
     }
-    // else return "Invalid email"
-    else return 0
 }
+
 
 
 // export async function createUser(id, username, fname, lname, )

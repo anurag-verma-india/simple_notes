@@ -79,6 +79,18 @@ VALUES
         'af2bdbe1aa9b6ec1e2ade1d694f41fc71a831d0268e9891562113d8a62add1bf'
     );
 
+INSERT INTO
+    users (username, fname, lname, email, phone, passkey)
+VALUES
+    (
+        'user',
+        'Sample',
+        'Sam',
+        'a@s.d',
+        '00000000',
+        '18ac3e7343f016890c510e93f935261169d9e3f565436429830faf0934f4f8e4'
+    );
+
 -- INSERT INTO
 -- INSERT INTO
 --     users()

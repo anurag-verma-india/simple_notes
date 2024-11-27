@@ -13,7 +13,7 @@ console.log(hash2)
 let hash3 = createHash('sha256').update('sample').digest("hex")
 console.log(hash3);
 
-
+console.log(createHash('sha256').update('d').digest("hex"))
 
 // const {
 //   getHashes,
