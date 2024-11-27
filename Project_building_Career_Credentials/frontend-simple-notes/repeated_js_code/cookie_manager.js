@@ -17,7 +17,7 @@ export function setCookie(name, value, days) {
 export function deleteCookie(name) { setCookie(name, '', -1); }
 
 
-export function deletAllCookies() {
+export function deleteAllCookies() {
     var cookies = document.cookie.split("; ");
     for (var c = 0; c < cookies.length; c++) {
         var d = window.location.hostname.split(".");

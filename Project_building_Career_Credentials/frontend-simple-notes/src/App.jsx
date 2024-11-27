@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Routes, Route, Navigate, BrowserRouter } from "react-router-dom";
 import { createBrowserRouter, Link, RouterProvider } from "react-router-dom";
 import "./App.css";
 import "../components/NotesPage.css";
@@ -9,8 +10,8 @@ import Login from "../components/Login";
 import NotesPage from "../components/NotesPage";
 import EditProfile from "../components/EditProfile";
 import Register from "../components/Register";
-import Home from "../components/Home";
 import ForgotPassword from "../components/ForgotPassword";
+import AlreadyLoggedIn from "../components/AlreadyLoggedIn";
 
 axios.defaults.withCredentials = true;
 
@@ -19,28 +20,15 @@ function App() {
     // const [currPage, setCurrPage] = useState("login");
 
     const router = createBrowserRouter([
-        {
-            path: "/",
-            element: (
-                <Home
-                    userAuthenticated={userAuthenticated}
-                    setUserAuthenticated={setUserAuthenticated}
-                />
-            ),
-        },
-        {
-            path: "/login",
-            element: (
-                <Home
-                    userAuthenticated={userAuthenticated}
-                    setUserAuthenticated={setUserAuthenticated}
-                />
-            ),
-        },
-        {
-            path: "/register",
-            element: <Register />,
-        },
+        // {
+        //     path: "/register",
+        //     element: (
+        //         <Register
+        //             userAuthenticated={userAuthenticated}
+        //             setUserAuthenticated={setUserAuthenticated}
+        //         />
+        //     ),
+        // },
         {
             path: "/edit",
             element: (
@@ -52,11 +40,21 @@ function App() {
         },
         {
             path: "/notes",
-            element: <NotesPage />,
+            element: (
+                <NotesPage
+                    userAuthenticated={userAuthenticated}
+                    setUserAuthenticated={setUserAuthenticated}
+                />
+            ),
         },
         {
             path: "/forgotPassword",
-            element: <ForgotPassword />,
+            element: (
+                <ForgotPassword
+                    userAuthenticated={userAuthenticated}
+                    setUserAuthenticated={setUserAuthenticated}
+                />
+            ),
         },
     ]);
 
@@ -67,7 +65,99 @@ function App() {
     // login register notes edit
     return (
         <>
-            <RouterProvider router={router} />
+            <BrowserRouter>
+                <Routes>
+                    <Route
+                        path="/forgotPassword"
+                        element={
+                            <ForgotPassword
+                                userAuthenticated={userAuthenticated}
+                                setUserAuthenticated={setUserAuthenticated}
+                            />
+                        }
+                    />
+                    <Route
+                        path="/login"
+                        element={
+                            !userAuthenticated ? (
+                                <Login
+                                    userAuthenticated={userAuthenticated}
+                                    setUserAuthenticated={setUserAuthenticated}
+                                />
+                            ) : (
+                                // <Navigate to="/alreadyLoggedIn" />
+                                <Navigate to="/notes" />
+                            )
+                        }
+                    />
+                    <Route
+                        path="/register"
+                        element={
+                            !userAuthenticated ? (
+                                <Register
+                                    userAuthenticated={userAuthenticated}
+                                    setUserAuthenticated={setUserAuthenticated}
+                                />
+                            ) : (
+                                <Navigate to="/notes" />
+                            )
+                        }
+                    />
+
+                    <Route
+                        path="/"
+                        element={
+                            userAuthenticated ? (
+                                <Navigate to="/notes" />
+                            ) : (
+                                <Navigate to="/login" />
+                            )
+                        }
+                    />
+                    <Route
+                        path="/notes"
+                        element={
+                            userAuthenticated ? (
+                                <NotesPage
+                                    userAuthenticated={userAuthenticated}
+                                    setUserAuthenticated={setUserAuthenticated}
+                                />
+                            ) : (
+                                <Navigate to="/login" />
+                            )
+                        }
+                    />
+                    <Route
+                        path="/edit"
+                        element={
+                            userAuthenticated ? (
+                                <EditProfile
+                                    userAuthenticated={userAuthenticated}
+                                    setUserAuthenticated={setUserAuthenticated}
+                                />
+                            ) : (
+                                <Navigate to="/login" />
+                            )
+                        }
+                    />
+
+                    {/* <Route
+                        path="/alreadyLoggedIn"
+                        element={
+                            userAuthenticated ? (
+                                <AlreadyLoggedIn
+                                    userAuthenticated={userAuthenticated}
+                                    setUserAuthenticated={setUserAuthenticated}
+                                />
+                            ) : (
+                                <Navigate to="/login" />
+                            )
+                        }
+                    /> */}
+                </Routes>
+            </BrowserRouter>
+            {/* <RouterProvider router={router} /> */}
+
             {/* {userAuthenticated && currPage === "login" && (
                 <Login
                     currPage={currPage}

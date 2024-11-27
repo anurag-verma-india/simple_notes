@@ -4,11 +4,12 @@ import {
     getCookie,
     setCookie,
     deleteCookie,
-    deletAllCookies,
+    deleteAllCookies,
 } from "../repeated_js_code/cookie_manager";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Login(props) {
+    const navigate = useNavigate();
     const [userEmail, setUserEmail] = useState("");
     const [userPassword, setUserPassword] = useState("");
     const [isError, setIsError] = useState(false);
@@ -19,6 +20,7 @@ function Login(props) {
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
+        console.log(props.userAuthenticated);
         console.log(userEmail);
         console.log(userPassword);
 
@@ -39,6 +41,8 @@ function Login(props) {
                 if (res.data.authenticated) {
                     // console.log("User authenticated");
                     props.setUserAuthenticated(true);
+                    navigate("/");
+
                     // props.setCurrPage("notes");
                 }
                 // console.log(res.data.user);
@@ -109,8 +113,8 @@ function Login(props) {
                 </form>
                 <a
                     className="small-fonts"
-                    target="_blank"
                     // href="/forgot-password"
+                    onClick={() => navigate("/forgotPassword")}
                 >
                     Forgot Password?
                 </a>

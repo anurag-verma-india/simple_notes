@@ -1,5 +1,9 @@
 import { Link } from "react-router-dom";
-import { deletAllCookies, deleteCookie } from "../repeated_js_code/cookie_manager";
+import {
+    deleteAllCookies,
+    deleteCookie,
+} from "../repeated_js_code/cookie_manager";
+import { LogOutFunc } from "../repeated_js_code/LogOutFunc";
 // import LogOutFunc from "../repeated_js_code/LogOutFunc";
 
 function NotesPage(props) {
@@ -8,18 +12,22 @@ function NotesPage(props) {
             <div id="HeadingContainer">
                 <h1>Notes</h1>
                 <div id="LogOut">
-                    <Link to="/">
-                        <button
-                            onClick={() => {
-                                // LogOutFunc(props);
-                                deleteCookie("connect.sid")
-                                deletAllCookies();
-                                props.setUserAuthenticated(false);
-                            }}
-                        >
-                            Log Out
-                        </button>
-                    </Link>
+                    {/* <Link to="/"> */}
+                    <button
+                        onClick={() => {
+                            LogOutFunc(props);
+                            props.setUserAuthenticated(false);
+                        }}
+                        // onClick={() => {
+                        // LogOutFunc(props);
+                        // deleteCookie("connect.sid");
+                        // deleteAllCookies();
+                        // props.setUserAuthenticated(false);
+                        // }}
+                    >
+                        Log out
+                    </button>
+                    {/* </Link> */}
                 </div>
                 <div id="editIcon">
                     <Link to="/edit">

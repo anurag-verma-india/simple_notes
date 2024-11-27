@@ -1,15 +1,24 @@
 import { useEffect, useState } from "react";
 import "../components/EditProfile.css";
 import {
-    deletAllCookies,
+    deleteAllCookies,
     deleteCookie,
     getCookie,
 } from "../repeated_js_code/cookie_manager";
-import { Link } from "react-router-dom";
-// import LogOutFunc from "../repeated_js_code/LogOutFunc";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { LogOutFunc } from "../repeated_js_code/LogOutFunc";
 
 function EditProfile(props) {
+    const navigate = useNavigate();
     // useEffect(() => {
+    const [oldFormData, setOldFormData] = useState({
+        fname: "",
+        lname: "",
+        username: "",
+        email: "",
+        phone: "",
+    });
     const [formData, setFormData] = useState({
         fname: getCookie("fname"),
         lname: getCookie("lname"),
@@ -21,6 +30,36 @@ function EditProfile(props) {
     // }, []);
     function handleEditProfileForm(event) {
         event.preventDefault();
+        // get user details from server
+        // if (confirm("Press a button!")) {
+        // } else {
+        // }
+
+        axios
+            .post(`http://localhost:7000/getSessionDetails`, {
+                // email: getCookie("email"),
+            })
+            .then((res) => {
+                console.log(res);
+                // if (res.data.authenticated) {
+                //     setFormData(res.data.user);
+                //     console.log(res.data.user);
+                // }
+            })
+            .catch((err) => {
+                // console.log(
+                //     "err:\n",
+                //     err.response.data.type,
+                //     err.response.data.message
+                // );
+                console.log("err full: \n", err);
+                if (err.response.data.type === 0) {
+                    LogOutFunc(props)
+                }
+                // alert(
+                //     "Some error occured, please try again or contact the site operator"
+                // );
+            });
     }
 
     return (
@@ -74,14 +113,13 @@ function EditProfile(props) {
                         setFormData({ ...formData, phone: e.target.value });
                     }}
                 />
-                <label htmlFor="email">Email Address</label>
+                <label htmlFor="email">Email Address (Uneditable)</label>
                 <input
                     name="email"
                     type="email"
                     value={formData.email}
-                    onChange={(e) => {
-                        setFormData({ ...formData, email: e.target.value });
-                    }}
+                    readOnly={true}
+                    style={{ color: "gray" }}
                 />
                 {/* <button id="update-password">Update Password</button> */}
                 <div>
@@ -89,22 +127,20 @@ function EditProfile(props) {
                         type="submit"
                         name="button"
                         style={{ margin: "2rem" }}
+                        // onClick={handleEditProfileForm}
                     >
                         Save
                     </button>
-                    <Link to="/">
-                        <button
-                            onClick={() => {
-                                // LogOutFunc(props);
-                                deleteCookie("connect.sid");
-                                deletAllCookies();
-                                props.setUserAuthenticated(false);
-                            }}
-                            style={{ margin: "2rem" }}
-                        >
-                            Log out
-                        </button>
-                    </Link>
+                    {/* <Link to="/"> */}
+                    <button
+                        onClick={() => {
+                            LogOutFunc(props);
+                        }}
+                        style={{ margin: "2rem" }}
+                    >
+                        Log out
+                    </button>
+                    {/* </Link> */}
                 </div>
             </form>
         </>
