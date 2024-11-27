@@ -7,6 +7,7 @@ function Register() {
     const [inputs, setInputs] = useState({
         firstName: "",
         lastName: "",
+        username: "",
         phone: "",
         email: "",
         password: "",
@@ -44,6 +45,16 @@ function Register() {
                         placeholder="Doe"
                         onChange={(e) => {
                             setInputs({ ...inputs, lastName: e.target.value });
+                        }}
+                    />
+                    <label htmlFor="username">Username</label>
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="john_doe"
+                        onChange={(e) => {
+                            setInputs({ ...inputs, username: e.target.value });
                         }}
                     />
                     <label

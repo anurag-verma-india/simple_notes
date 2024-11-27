@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { deletAllCookies } from "../repeated_js_code/cookie_manager";
+import { deletAllCookies, deleteCookie } from "../repeated_js_code/cookie_manager";
+// import LogOutFunc from "../repeated_js_code/LogOutFunc";
 
 function NotesPage(props) {
     return (
@@ -10,9 +11,10 @@ function NotesPage(props) {
                     <Link to="/">
                         <button
                             onClick={() => {
+                                // LogOutFunc(props);
+                                deleteCookie("connect.sid")
                                 deletAllCookies();
                                 props.setUserAuthenticated(false);
-                                // window.location.reload();
                             }}
                         >
                             Log Out

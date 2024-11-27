@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 function Login(props) {
     const [userEmail, setUserEmail] = useState("");
     const [userPassword, setUserPassword] = useState("");
+    const [isError, setIsError] = useState(false);
     // const [userAuthenticated, setUserAuthenticated] = useState(false);
     // const username = getCookie("username")
     // console.log(username)
@@ -49,7 +50,20 @@ function Login(props) {
                     err.response.data.type,
                     err.response.data.message
                 );
-                console.log("err full: \n", err);
+                // console.log("err full: \n", err);
+                if (err.response.data.type == -1) {
+                    setIsError(
+                        "User is inactive, please contact administrator"
+                    );
+                }
+                if (err.response.data.type == 0) {
+                    setIsError(
+                        "This is email is not associated with any account"
+                    );
+                }
+                if (err.response.data.type == 1) {
+                    setIsError("The password you entered is incorrect");
+                }
             });
         // window.location.reload();
     };
@@ -88,6 +102,7 @@ function Login(props) {
                         }}
                         value={userPassword}
                     />
+                    {isError && <p style={{ color: "red" }}>{isError}</p>}
                     <button type="submit" name="button">
                         Login
                     </button>

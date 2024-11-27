@@ -1,16 +1,21 @@
 import { useEffect, useState } from "react";
 import "../components/EditProfile.css";
-import { deletAllCookies, getCookie } from "../repeated_js_code/cookie_manager";
+import {
+    deletAllCookies,
+    deleteCookie,
+    getCookie,
+} from "../repeated_js_code/cookie_manager";
 import { Link } from "react-router-dom";
+// import LogOutFunc from "../repeated_js_code/LogOutFunc";
 
 function EditProfile(props) {
     // useEffect(() => {
     const [formData, setFormData] = useState({
-        email: getCookie("email"),
-        phone: getCookie("phone"),
         fname: getCookie("fname"),
         lname: getCookie("lname"),
         username: getCookie("username"),
+        email: getCookie("email"),
+        phone: getCookie("phone"),
     });
     // console.log(email, fname, lname, username);
     // }, []);
@@ -51,6 +56,15 @@ function EditProfile(props) {
                         setFormData({ ...formData, lname: e.target.value });
                     }}
                 />
+                <label htmlFor="username">Username</label>
+                <input
+                    name="username"
+                    type="text"
+                    value={formData.username}
+                    onChange={(e) => {
+                        setFormData({ ...formData, username: e.target.value });
+                    }}
+                />
                 <label htmlFor="phone">Phone Number</label>
                 <input
                     name="phone"
@@ -78,15 +92,19 @@ function EditProfile(props) {
                     >
                         Save
                     </button>
-                    <button
-                        onClick={() => {
-                            deletAllCookies();
-                            // props.setUserAuthenticated(false);
-                        }}
-                        style={{ margin: "2rem" }}
-                    >
-                        Log out
-                    </button>
+                    <Link to="/">
+                        <button
+                            onClick={() => {
+                                // LogOutFunc(props);
+                                deleteCookie("connect.sid");
+                                deletAllCookies();
+                                props.setUserAuthenticated(false);
+                            }}
+                            style={{ margin: "2rem" }}
+                        >
+                            Log out
+                        </button>
+                    </Link>
                 </div>
             </form>
         </>
