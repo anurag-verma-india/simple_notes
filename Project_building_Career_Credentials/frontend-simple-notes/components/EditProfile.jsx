@@ -70,8 +70,13 @@ function EditProfile(props) {
                         axios
                             .post(jsonLinks.patchUser, { changedValues })
                             .then((res) => {
-                                console.log(res);
+                                console.log("results of change request: ", res);
                                 setTheseCookies(changedValues);
+                                // setFormData({ ...formData, changedValues });
+                                // setOldFormData({
+                                //     ...oldFormData,
+                                //     changedValues,
+                                // });
                             })
                             .catch((err) => {
                                 console.log("patchUser error: \n", err);
