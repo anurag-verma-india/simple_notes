@@ -1,3 +1,4 @@
+import * as jsonLinks from "../src/links.json";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import {
@@ -26,7 +27,8 @@ function Login(props) {
 
         // Save username to the cookies too
         axios
-            .post(`http://localhost:7000/login`, {
+            // .post(`http://localhost:7000/login`, {
+            .post(jsonLinks.loginLink, {
                 email: userEmail,
                 password: userPassword,
             })
