@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import "./Register.css";
+import { Link } from "react-router-dom";
 
 function Register() {
     const [inputs, setInputs] = useState({
@@ -115,16 +116,12 @@ function Register() {
                         Register
                     </button>
                 </form>
-                <a
-                    className="small-fonts"
-                    target="_blank"
-                    href="/forgotPassword"
-                >
-                    Forgot Password?
-                </a>
-                <a className="small-fonts" href="/login">
-                    Log in to existing account
-                </a>
+                <Link to="/forgotPassword">
+                    <p className="small-fonts">Forgot Password?</p>
+                </Link>
+                <Link to="/login">
+                    <p className="small-fonts">Log in to existing account</p>
+                </Link>
             </div>
         </>
     );
