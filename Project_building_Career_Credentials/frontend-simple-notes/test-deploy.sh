@@ -1,6 +1,8 @@
 
 npm run build
-cp -r ./dist/* ../backend-simple-notes/frontend/
+rm -rf ../backend-simple-notes/public
+mkdir ../backend-simple-notes/public
+cp -r ./dist/* ../backend-simple-notes/public/
 
-echo "Copied files to ../backend-simple-notes/frontend/"
+echo "Copied files to ../backend-simple-notes/public/"
 

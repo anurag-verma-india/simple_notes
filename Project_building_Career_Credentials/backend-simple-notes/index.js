@@ -4,6 +4,7 @@ import { getUserById, getUsers, checkPassword, getUserByEmail, patchUser } from 
 import session from 'express-session'
 import path from 'node:path'
 const port = 7000
+const frontend_folder = 'public'
 const store = new session.MemoryStore(); // Session module has a class MemoryStore 
 
 const app = express()
@@ -16,7 +17,7 @@ const corsOptions = {
     optionSuccessStatus: 200 // For legacy browser (IE11, Smart TVs)
 }
 // Session middlewares
-app.use(express.static('frontend'))
+app.use(express.static(frontend_folder))
 app.use(cors(corsOptions))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -195,7 +196,7 @@ app.post('/patchUser', async (req, res) => {
 // All the unknown requests are redirected to the React SPA
 // https://stackoverflow.com/questions/27928372/react-router-urls-dont-work-when-refreshing-or-writing-manually/77231332#77231332
 const __dirname = import.meta.dirname;
-const frontend = path.join(__dirname, 'frontend');
+const frontend = path.join(__dirname, frontend_folder);
 app.use(function (req, res, next) {
     res.sendFile(path.join(frontend, 'index.html'));
 });
