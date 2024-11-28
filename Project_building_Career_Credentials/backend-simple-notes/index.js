@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import { getUserById, getUsers, checkPassword, getUserByEmail, patchUser } from './database.js'
 import session from 'express-session'
+import path from 'node:path'
 const port = 7000
 const store = new session.MemoryStore(); // Session module has a class MemoryStore 
 
@@ -15,15 +16,14 @@ const corsOptions = {
     optionSuccessStatus: 200 // For legacy browser (IE11, Smart TVs)
 }
 // Session middlewares
+app.use(express.static('frontend'))
 app.use(cors(corsOptions))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-
 app.use((req, res, next) => {
     console.log(`${req.method} - ${req.url}`)
     next()
 })
-
 app.use(session({
     secret: process.env.secret,
 
@@ -32,6 +32,9 @@ app.use(session({
     resave: false, // https://github.com/expressjs/session#options // read this for details (date accessed: 26 Nov 2024)
     store: store
 }))
+
+
+
 // app.use(async (req, res, next) => {
 //     if (req.session.authenticated) {
 //         next()
@@ -105,7 +108,7 @@ app.use(session({
 
 
 
-//-
+//- 
 app.post('/login', async (req, res) => {
     console.log(req.sessionID)
     // console.log("req.body\n", req.body)
@@ -188,6 +191,14 @@ app.post('/patchUser', async (req, res) => {
     } else
         res.status(401).send({ type: 0, message: "User is not authenticated" })
 })
+
+// All the unknown requests are redirected to the React SPA
+// https://stackoverflow.com/questions/27928372/react-router-urls-dont-work-when-refreshing-or-writing-manually/77231332#77231332
+const __dirname = import.meta.dirname;
+const frontend = path.join(__dirname, 'frontend');
+app.use(function (req, res, next) {
+    res.sendFile(path.join(frontend, 'index.html'));
+});
 
 app.listen(port, () => {
     console.log("The server is running on port:", port);

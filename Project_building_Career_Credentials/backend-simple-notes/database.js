@@ -95,15 +95,33 @@ export async function checkPassword(email, password) {
 
 
 export async function patchUser(userDetails, userEmail) {
-    console.log("patch these: ", userDetails, "\n On this user", userEmail)
-    for (const [key, value] of Object.entries(userDetails)) {
+    console.log("patching these: ", userDetails, "\n On this user", userEmail)
+
+    // This way of looping over is working for some reason (maybe it as something to do with async await)
+    Object.entries(userDetails).forEach(async ([key, value]) => {
         console.log(
             `changing\n-> ${key}: ${value}\n`
         );
+        // 
         const [result] = await pool.query(`UPDATE users SET ${key} = ? WHERE email = ?`, [value, userEmail])
-        // console.log("---\nresult: \n", result.info, "\n---")
+
+        // const [result] = await pool.query(`UPDATE users SET ${key} = ${value} WHERE email = ?`, [value, userEmail])
+        // const [result] = await pool.query(`UPDATE users SET ${key} = \`${value}\` WHERE email = ?`, [userEmail])
+        console.log("---\nresult:\n", result.info, "\n---")
         return result.info
-    }
+    });
+    // for (const [key, value] of Object.entries(userDetails)) {
+    //     console.log(
+    //         `changing\n-> ${key}: ${value}\n`
+    //     );
+    //     // 
+    //     const [result] = await pool.query(`UPDATE users SET ${key} = ? WHERE email = ?`, [value, userEmail])
+
+    //     // const [result] = await pool.query(`UPDATE users SET ${key} = ${value} WHERE email = ?`, [value, userEmail])
+    //     // const [result] = await pool.query(`UPDATE users SET ${key} = \`${value}\` WHERE email = ?`, [userEmail])
+    //     console.log("---\nresult:\n", result.info, "\n---")
+    //     return result.info
+    // }
 }
 
 
