@@ -12,7 +12,7 @@ const app = express()
 const corsOptions = {
     credentials: true,
     AccessControlAllowOrigin: true,
-    origin: ['http://localhost:5173', 'https://simple-notes-ochre.vercel.app', 'https://simple-notes-frontend-dlure16bg-anurag-verma-indias-projects.vercel.app'],
+    origin: ['http://localhost:5174', 'http://localhost:5173', 'https://simple-notes-ochre.vercel.app', 'https://simple-notes-frontend-dlure16bg-anurag-verma-indias-projects.vercel.app'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     optionSuccessStatus: 200 // For legacy browser (IE11, Smart TVs)
 }

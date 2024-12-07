@@ -1,0 +1,5 @@
+{
+    "getSessionDetails": "https://simple-notes-ochre.vercel.app/getSessionDetails",
+    "patchUser": "https://simple-notes-ochre.vercel.app/patchUser",
+    "loginLink": "https://simple-notes-ochre.vercel.app/login"
+}
